@@ -45,7 +45,7 @@ Experience the application live:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/career-advisor-bot.git
+   git clone https://github.com/FarsanaDS/Career-advisor-bot.git
    cd career-advisor-bot
    ```
 
