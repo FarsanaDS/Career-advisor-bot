@@ -17,7 +17,7 @@ class Config:
     # Limits
     MAX_RESUME_LENGTH = 10000
     MIN_INPUT_LENGTH = 3
-    REQUEST_TIMEOUT = 25
+    REQUEST_TIMEOUT = 30
     
     # CORS
     ALLOWED_ORIGINS = [
