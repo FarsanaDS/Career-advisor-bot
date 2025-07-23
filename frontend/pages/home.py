@@ -1,0 +1,115 @@
+import streamlit as st
+from typing import Dict
+from frontend.utils.styling import load_css
+from frontend.utils.api_client import APIClient
+from frontend.components.file_upload import FileUploadComponent
+from frontend.components.history import HistoryComponent
+
+class HomePage:
+    def __init__(self):
+        self.api = APIClient()
+        self.file_upload = FileUploadComponent()
+        self.history = HistoryComponent()
+        self._setup_page_config()
+    
+    def _setup_page_config(self):
+        st.set_page_config(
+            page_title="AI Career Advisor Pro",
+            page_icon="💼",
+            layout="centered",
+            initial_sidebar_state="expanded"
+        )
+        st.markdown(load_css(), unsafe_allow_html=True)
+    
+    def _skill_chips(self, skills: str):
+        """Visual skill tags"""
+        cols = st.columns(4)
+        for i, skill in enumerate(skill.strip() for skill in skills.split(",")):
+            if skill:
+                cols[i%4].markdown(f'<div class="skill-chip">{skill}</div>', unsafe_allow_html=True)
+    
+    def _render_sidebar(self) -> Dict:
+        """Render sidebar and return resume data"""
+        with st.sidebar:
+            st.title("🔍 Profile Setup")
+            resume_data = self.file_upload.render()
+            
+            st.markdown("---")
+            st.markdown("""
+            **💡 Pro Tips:**
+            - Use specific skills like "Python (Pandas, NumPy)"
+            - Mention industries you're interested in
+            - Upload resume for salary estimates
+            """)
+            
+            return resume_data
+    
+    def _render_main_form(self, resume_data: Dict):
+        """Render main form and handle submissions"""
+        st.title("💼 AI Career Advisor Pro")
+        st.caption("Powered by Gemini AI | v2.2")
+        
+        with st.form("career_form"):
+            skills = st.text_input(
+                "🔧 Your Skills (comma separated)",
+                placeholder="Python, SQL, Data Visualization",
+                help="Be specific about frameworks/tools"
+            )
+            
+            interests = st.text_input(
+                "❤️ Your Interests",
+                placeholder="Machine Learning, Healthcare Tech",
+                help="Industries or domains that excite you"
+            )
+            
+            submitted = st.form_submit_button("🚀 Get Career Advice")
+        
+        if submitted:
+            if not skills or not interests:
+                st.warning("Please enter both skills and interests")
+            else:
+                with st.spinner("🔍 Analyzing your profile..."):
+                    data = {
+                        "skills": skills,
+                        "interests": interests,
+                        "resume_text": resume_data.get("text", "")
+                    }
+                    
+                    result = self.api.get_advice(data)
+                    
+                    if result.get("success"):
+                        self.history.add_entry(skills, result)
+                        
+                        # Display results
+                        st.subheader("🎯 Career Recommendations")
+                        st.markdown(result["advice"], unsafe_allow_html=True)
+                        
+                        if result.get("truncated"):
+                            st.warning("Note: Resume analysis was truncated for length")
+                        
+                        # Show skills visually
+                        st.subheader("🛠️ Your Skills")
+                        self._skill_chips(skills)
+                        
+                        # Show history
+                        self.history.render()
+                    
+                    else:
+                        st.markdown(f"""
+                        <div class="error-box">
+                            <h4>⚠️ Error Getting Advice</h4>
+                            <p>{result.get('error', 'Unknown error')}</p>
+                            <p>Try refreshing the page or checking your network connection.</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+    
+    def render(self):
+        """Render the complete home page"""
+        resume_data = self._render_sidebar()
+        self._render_main_form(resume_data)
+        
+        # Footer
+        st.markdown("---")
+        st.caption("""
+        ℹ️ Note: Recommendations are AI-generated. Always verify with career professionals.
+        """)
