@@ -22,7 +22,9 @@ class Config:
     # CORS
     ALLOWED_ORIGINS = [
         "https://career-advisor-frontend.onrender.com",
-        "http://localhost:8501"
+        "http://localhost:8501",
+        "https://render.com",
+        "https://*.render.com"
     ]
     
     @classmethod
