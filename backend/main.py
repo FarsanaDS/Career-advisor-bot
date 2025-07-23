@@ -1,8 +1,9 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.config import Config
 from backend.utils.helpers import setup_logging
-from backend.routes import career_advice, health
+from backend.routes import career_advice, health  # Fixed import
 
 # Initialize logging
 setup_logging()
@@ -31,9 +32,10 @@ app.include_router(career_advice.router, prefix="/api/v1")
 
 if __name__ == "__main__":
     import uvicorn
+    port = int(os.environ.get("PORT", 8000))  # Use PORT from environment
     uvicorn.run(
         app, 
         host="0.0.0.0", 
-        port=8000,
+        port=port,
         log_level="info" if not Config.DEBUG else "debug"
     )
