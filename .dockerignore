@@ -9,4 +9,10 @@ __pycache__
 Dockerfile*
 README.md
 frontend/
+frontend/node_modules/
 backend/tests/
+*.log
+*.pdf
+*.csv
+*.data
+.vscode
