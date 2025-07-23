@@ -9,6 +9,8 @@ services:
       - key: PORT
         value: 8000
     dockerfilePath: Dockerfile
+    buildCommand: docker build -t career-backend .
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port 8000
 
   - type: web
     name: career-advisor-frontend
@@ -20,3 +22,5 @@ services:
       - key: PORT
         value: 8501
     dockerfilePath: Dockerfile.frontend
+    buildCommand: docker build -t career-frontend -f Dockerfile.frontend .
+    startCommand: streamlit run frontend/main.py --server.port 8501 --server.address 0.0.0.0
