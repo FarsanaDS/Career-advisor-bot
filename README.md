@@ -1,11 +1,8 @@
 # AI Career Advisor Pro 💼
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://career-advisor-frontend.onrender.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 AI Career Advisor Pro is an intelligent career guidance application that analyzes your skills, interests, and resume to provide personalized career recommendations. Powered by Google's Gemini AI, it offers actionable insights and resources to help you advance your career.
-
-![AI Career Advisor Pro Screenshot](https://via.placeholder.com/800x400?text=Career+Advisor+Screenshot)
 
 ## Features ✨
 
