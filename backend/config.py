@@ -20,12 +20,7 @@ class Config:
     REQUEST_TIMEOUT = 30
     
     # CORS
-    ALLOWED_ORIGINS = [
-        "https://career-advisor-frontend.onrender.com",
-        "http://localhost:8501",
-        "https://render.com",
-        "https://*.render.com"
-    ]
+    ALLOWED_ORIGINS = ["*"]
     
     @classmethod
     def validate(cls):
