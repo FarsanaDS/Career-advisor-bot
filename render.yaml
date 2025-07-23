@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: career-advisor-backend
+    runtime: docker
+    plan: free
+    envVars:
+      - key: GEMINI_API_KEY
+        fromGroup: gemini-api-key
+      - key: PORT
+        value: 8000
+    dockerfilePath: Dockerfile
+
+  - type: web
+    name: career-advisor-frontend
+    runtime: docker
+    plan: free
+    envVars:
+      - key: BACKEND_URL
+        value: https://career-advisor-backend.onrender.com
+      - key: PORT
+        value: 8501
+    dockerfilePath: Dockerfile.frontend
