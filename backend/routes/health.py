@@ -4,6 +4,15 @@ from backend.models.gemini_model import GeminiModel
 
 router = APIRouter()
 
+@router.get("/")
+async def root():
+    return {
+        "app": Config.APP_NAME,
+        "version": Config.APP_VERSION,
+        "status": "running",
+        "docs": "/docs"
+    }
+
 @router.get("/health")
 async def health_check():
     """Endpoint for health checks"""
