@@ -10,8 +10,6 @@ RUN apt-get update && \
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-RUN pip install --upgrade pip
-
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
