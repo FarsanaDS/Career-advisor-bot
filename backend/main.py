@@ -3,7 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.config import Config
 from backend.utils.helpers import setup_logging
-from backend.routes import career_advice, health  # Fixed import
+from backend.routes import career_advice
+from backend.routes.health import router as health_router
 
 # Initialize logging
 setup_logging()
@@ -27,7 +28,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(health.router)
+app.include_router(health_router)
 app.include_router(career_advice.router, prefix="/api/v1")
 
 if __name__ == "__main__":
