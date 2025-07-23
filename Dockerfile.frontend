@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
 # RUN pip install --no-cache-dir -r requirements.txt
 COPY requirements.txt setup.py ./
 
-RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -e .
 
 # Copy entire project
