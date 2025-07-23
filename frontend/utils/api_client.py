@@ -6,7 +6,7 @@ from backend.config import Config
 
 class APIClient:
     def __init__(self, base_url: str = None):
-        self.base_url = base_url or os.getenv("BACKEND_URL", "http://localhost:8000")
+        self.base_url = base_url or os.getenv("BACKEND_URL", "https://career-advisor-backend-2f94.onrender.com")
     
     def get_advice(self, data: Dict) -> Dict:
         """Get career advice with error handling"""
