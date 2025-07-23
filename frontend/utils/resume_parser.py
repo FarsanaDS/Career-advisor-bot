@@ -3,7 +3,7 @@ from PIL import Image
 import io
 import streamlit as st
 from typing import Dict, Optional
-from backend.config import Config
+from ...backend.config import Config
 
 class ResumeParser:
     def __init__(self, max_file_size: int = 5_000_000):
