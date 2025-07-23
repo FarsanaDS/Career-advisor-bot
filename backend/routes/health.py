@@ -5,7 +5,7 @@ from backend.models.gemini_model import GeminiModel
 router = APIRouter()
 
 @router.get("/")
-async def root():
+async def home():
     return {
         "app": Config.APP_NAME,
         "version": Config.APP_VERSION,
