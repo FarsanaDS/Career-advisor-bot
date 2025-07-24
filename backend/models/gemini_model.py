@@ -15,7 +15,15 @@ class GeminiModel:
         """Initialize Gemini with fallback handling"""
         try:
             genai.configure(api_key=Config.GEMINI_API_KEY)
-            
+
+            # Use the provided model name or default
+            try:
+                self.model = genai.GenerativeModel(self.model_name)
+                logger.info(f"Using Gemini model: {self.model_name}")
+                return
+            except Exception as e:
+                logger.warning(f"Failed to initialize {self.model_name}: {str(e)}")
+                
             # Try preferred models in order
             for model_name in Config.GEMINI_MODELS:
                 try:
