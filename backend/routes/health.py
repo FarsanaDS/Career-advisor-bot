@@ -2,9 +2,15 @@ from fastapi import APIRouter
 from backend.config import Config
 from backend.models.multi_model import MultiModel
 import logging
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
+
+@router.get("/")
+async def root():
+    """Redirect root to health endpoint"""
+    return RedirectResponse(url="/health")
 
 @router.get("/health")
 async def health_check():
