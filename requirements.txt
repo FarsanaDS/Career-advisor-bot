@@ -7,3 +7,4 @@ pymupdf==1.23.25
 Pillow==10.2.0
 requests==2.31.0
 python-multipart==0.0.9
+aiohttp==3.9.5
