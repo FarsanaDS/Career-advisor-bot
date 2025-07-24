@@ -7,6 +7,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
+# Initialize limiter and router
 limiter = Limiter(key_func=get_remote_address)
 router = APIRouter()
 router.state.limiter = limiter
@@ -22,26 +23,35 @@ async def root():
 @router.get("/health")
 @limiter.limit("10/minute")
 async def health_check():
-    """Comprehensive health check endpoint"""
+    """Comprehensive health check endpoint with model status"""
     try:
         # Test configuration
         if not Config.GEMINI_API_KEY and not Config.OPENROUTER_API_KEY:
             raise RuntimeError("No API keys configured")
         
-        # Test model initialization
+        # Try model initialization
         try:
             model_service = MultiModel()
+            
+            # Get detailed model status
+            gemini_working = any("Gemini" in model['name'] for model in model_service.models)
+            openrouter_working = any("OpenRouter" in model['name'] for model in model_service.models)
+            
             model_status = "Model initialization successful"
         except Exception as e:
             model_status = f"Model initialization failed: {str(e)}"
             logger.error(model_status)
-            raise
+            gemini_working = False
+            openrouter_working = False
         
         return {
             "status": "healthy",
             "app": Config.APP_NAME,
             "version": Config.APP_VERSION,
-            "models_initialized": True,
+            "models": {
+                "gemini": gemini_working,
+                "openrouter": openrouter_working
+            },
             "model_status": model_status,
             "limits": {
                 "max_resume_length": Config.MAX_RESUME_LENGTH,
@@ -52,5 +62,9 @@ async def health_check():
         return {
             "status": "unhealthy",
             "error": str(e),
-            "models_initialized": False
+            "models": {
+                "gemini": False,
+                "openrouter": False
+            },
+            "model_status": "Initialization failed"
         }
