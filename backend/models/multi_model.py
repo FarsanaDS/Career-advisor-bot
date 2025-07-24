@@ -10,25 +10,28 @@ logger = logging.getLogger(__name__)
 class MultiModel:
     def __init__(self):
         self.models = []
-        self._initialize_models()
+        self._initialize()
     
-    def _initialize_models(self):
-        """Initialize all available AI models with fallback"""
-        # Try to initialize Gemini models first
-        if use_gemini and Config.GEMINI_API_KEY:
+    def _initialize(self):
+        """Initialize models with better error handling"""
+        # Initialize Gemini models
+        gemini_success = False
+        if Config.GEMINI_API_KEY:
             for model_name in Config.GEMINI_MODELS:
                 try:
                     gemini = GeminiModel(model_name)
                     self.models.append({
-                        "name": f"Gemini: {model_name}",
+                        "name": f"Gemini: {gemini.model_name}",
                         "instance": gemini,
                         "priority": 1
                     })
+                    gemini_success = True
                     logger.info(f"Added Gemini model: {model_name}")
                 except Exception as e:
-                    logger.warning(f"Failed to initialize Gemini {model_name}: {str(e)}")
+                    logger.warning(f"Skipping Gemini {model_name}: {str(e)}")
         
         # Initialize OpenRouter models
+        openrouter_success = False
         if Config.OPENROUTER_API_KEY:
             for model_id, model_name in Config.OPENROUTER_MODELS.items():
                 try:
@@ -38,12 +41,10 @@ class MultiModel:
                         "instance": openrouter,
                         "priority": 2
                     })
+                    openrouter_success = True
                     logger.info(f"Added OpenRouter model: {model_name}")
                 except Exception as e:
-                    logger.warning(f"Failed to initialize OpenRouter {model_name}: {str(e)}")
-        
-        # Sort models by priority (lower priority first)
-        self.models.sort(key=lambda x: x["priority"])
+                    logger.warning(f"Skipping OpenRouter {model_name}: {str(e)}")
         
         if not self.models:
             logger.error("No working AI models found")
@@ -51,6 +52,20 @@ class MultiModel:
                 status_code=500,
                 detail="AI service configuration failed"
             )
+        
+        # Log model status
+        status = []
+        if gemini_success:
+            status.append("Gemini: working")
+        else:
+            status.append("Gemini: unavailable")
+            
+        if openrouter_success:
+            status.append("OpenRouter: working")
+        else:
+            status.append("OpenRouter: unavailable")
+            
+        logger.info(f"Model status: {', '.join(status)}")
     
     async def generate_advice(self, skills: str, interests: str, resume_text: str = "") -> dict:
         """Generate career advice using available models with fallback"""
