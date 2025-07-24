@@ -6,42 +6,53 @@ from backend.config import Config
 logger = logging.getLogger(__name__)
 
 class GeminiModel:
-    def __init__(self):
+    def __init__(self, model_name: str):
         self.model = None
-        self.model_name = None
+        self.model_name = model_name
         self._initialize()
     
     def _initialize(self):
-        """Initialize Gemini with fallback handling"""
+        """Initialize Gemini with comprehensive error handling"""
         try:
+            # Verify API key first
+            if not Config.GEMINI_API_KEY:
+                raise ValueError("GEMINI_API_KEY is not configured")
+            
+            if not Config.GEMINI_API_KEY.startswith("AI"):
+                logger.warning("GEMINI_API_KEY format appears invalid")
+            
             genai.configure(api_key=Config.GEMINI_API_KEY)
-
-            # Use the provided model name or default
+            
             try:
+                # Get available models to verify API key
+                models = genai.list_models()
+                if not any(model.name == self.model_name for model in models):
+                    logger.warning(f"Model {self.model_name} not available")
+                
                 self.model = genai.GenerativeModel(self.model_name)
-                logger.info(f"Using Gemini model: {self.model_name}")
+                logger.info(f"Gemini model initialized: {self.model_name}")
                 return
             except Exception as e:
-                logger.warning(f"Failed to initialize {self.model_name}: {str(e)}")
+                logger.error(f"Failed to initialize {self.model_name}: {str(e)}")
+                # Try the other model as fallback
+                if self.model_name == "gemini-1.5-flash":
+                    fallback = "gemini-1.5-pro"
+                else:
+                    fallback = "gemini-1.5-flash"
                 
-            # Try preferred models in order
-            for model_name in Config.GEMINI_MODELS:
                 try:
-                    self.model = genai.GenerativeModel(model_name)
-                    self.model_name = model_name
-                    logger.info(f"Using model: {model_name}")
+                    self.model = genai.GenerativeModel(fallback)
+                    self.model_name = fallback
+                    logger.info(f"Using fallback model: {fallback}")
                     return
-                except Exception as e:
-                    logger.warning(f"Failed to initialize {model_name}: {str(e)}")
-                    continue
+                except Exception:
+                    raise RuntimeError(f"Both {self.model_name} and fallback failed")
             
-            raise RuntimeError("No working Gemini model found")
-        
         except Exception as e:
-            logger.error(f"Gemini initialization failed: {str(e)}")
+            logger.exception(f"Gemini initialization failed for {self.model_name}")
             raise HTTPException(
                 status_code=500,
-                detail="AI service configuration failed"
+                detail=f"Gemini AI service error: {str(e)}"
             )
     
     async def generate_advice(self, skills: str, interests: str, resume_text: str = "") -> str:
