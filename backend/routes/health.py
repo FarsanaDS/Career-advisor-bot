@@ -1,18 +1,34 @@
 from fastapi import APIRouter
 from backend.config import Config
 from backend.models.multi_model import MultiModel
+import logging
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 @router.get("/health")
 async def health_check():
-    """Endpoint for health checks"""
+    """Comprehensive health check endpoint"""
     try:
-        # Test model initialization without generating content
-        MultiModel()
+        # Test configuration
+        if not Config.GEMINI_API_KEY and not Config.OPENROUTER_API_KEY:
+            raise RuntimeError("No API keys configured")
+        
+        # Test model initialization
+        try:
+            model_service = MultiModel()
+            model_status = "Model initialization successful"
+        except Exception as e:
+            model_status = f"Model initialization failed: {str(e)}"
+            logger.error(model_status)
+            raise
+        
         return {
             "status": "healthy",
-            "models_available": True,
+            "app": Config.APP_NAME,
+            "version": Config.APP_VERSION,
+            "models_initialized": True,
+            "model_status": model_status,
             "limits": {
                 "max_resume_length": Config.MAX_RESUME_LENGTH,
                 "min_input_length": Config.MIN_INPUT_LENGTH
@@ -22,5 +38,5 @@ async def health_check():
         return {
             "status": "unhealthy",
             "error": str(e),
-            "models_available": False
+            "models_initialized": False
         }
