@@ -15,7 +15,7 @@ class MultiModel:
     def _initialize_models(self):
         """Initialize all available AI models with fallback"""
         # Try to initialize Gemini models first
-        if Config.GEMINI_API_KEY:
+        if use_gemini and Config.GEMINI_API_KEY:
             for model_name in Config.GEMINI_MODELS:
                 try:
                     gemini = GeminiModel(model_name)
