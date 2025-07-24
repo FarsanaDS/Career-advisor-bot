@@ -47,7 +47,7 @@ class HomePage:
     def _render_main_form(self, resume_data: Dict):
         """Render main form and handle submissions"""
         st.title("💼 AI Career Advisor Pro")
-        st.caption("Powered by Gemini AI | v2.2")
+        st.caption("Powered by Multi-Model AI | v3.0")
         
         with st.form("career_form"):
             skills = st.text_input(
