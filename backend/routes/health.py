@@ -1,26 +1,26 @@
 from fastapi import APIRouter
 from backend.config import Config
-from backend.models.gemini_model import GeminiModel
+from backend.models.multi_model import MultiModel
 
 router = APIRouter()
-
-@router.get("/")
-async def home():
-    return {
-        "app": Config.APP_NAME,
-        "version": Config.APP_VERSION,
-        "status": "running",
-        "docs": "/docs"
-    }
 
 @router.get("/health")
 async def health_check():
     """Endpoint for health checks"""
-    return {
-        "status": "healthy",
-        "model": GeminiModel().model_name,
-        "limits": {
-            "max_resume_length": Config.MAX_RESUME_LENGTH,
-            "min_input_length": Config.MIN_INPUT_LENGTH
+    try:
+        # Test model initialization without generating content
+        MultiModel()
+        return {
+            "status": "healthy",
+            "models_available": True,
+            "limits": {
+                "max_resume_length": Config.MAX_RESUME_LENGTH,
+                "min_input_length": Config.MIN_INPUT_LENGTH
+            }
         }
-    }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "error": str(e),
+            "models_available": False
+        }
