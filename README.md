@@ -1,28 +1,30 @@
-# AI Career Advisor Pro 💼
+# AI Career Advisor Pro 🤖💼
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://career-advisor-frontend.onrender.com)
+[![Multi-Model AI](https://img.shields.io/badge/Powered%20By-Gemini%20%2B%20OpenRouter-blue?style=for-the-badge)](https://openrouter.ai)
 
-AI Career Advisor Pro is an intelligent career guidance application that analyzes your skills, interests, and resume to provide personalized career recommendations. Powered by Google's Gemini AI, it offers actionable insights and resources to help you advance your career.
+**An intelligent career guidance system** that uses multiple AI models to provide reliable career advice, even during peak usage times. Get personalized career path recommendations, skill development guidance, and industry insights powered by cutting-edge AI.
 
-## Features ✨
+## Key Features ✨
 
-- **Personalized Career Advice**: Get tailored recommendations based on your skills and interests
-- **Resume Analysis**: Upload your resume for more accurate suggestions
-- **AI-Powered Insights**: Leverages Google's Gemini AI for intelligent career guidance
+- **Multi-Model AI Architecture**: Automatically switches between Gemini and OpenRouter models for reliable service
+- **Resume Analysis**: Extract insights from uploaded resumes
+- **Personalized Recommendations**: Career paths tailored to your skills and interests
+- **Skill Gap Identification**: Discover skills to develop for career advancement
+- **Model Transparency**: See which AI generated your advice
 - **Session History**: Track your previous queries and recommendations
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
 
 ## Tech Stack 🛠️
 
 **Backend:**
 - Python
 - FastAPI
-- Google Gemini API
+- Gemini API + OpenRouter API
 - Uvicorn
 
 **Frontend:**
 - Streamlit
-- PyMuPDF (for PDF processing)
+- PyMuPDF (PDF processing)
 - Pillow (image processing)
 
 **Deployment:**
@@ -31,87 +33,93 @@ AI Career Advisor Pro is an intelligent career guidance application that analyze
 
 ## Live Demo 🌐
 
-Experience the application live:  
+Experience the application now:  
 [https://career-advisor-frontend.onrender.com](https://career-advisor-frontend.onrender.com)
+
+## How It Works 🔍
+
+1. **Input Your Profile**: Share your skills, interests, and optionally upload a resume
+2. **AI Analysis**: Our system analyzes your profile using multiple AI models
+3. **Smart Fallback**: Automatically switches models if one service is unavailable
+4. **Personalized Advice**: Receive tailored career recommendations
+5. **Model Attribution**: See which AI generated your advice
 
 ## Local Development Setup 🛠️
 
 ### Prerequisites
 - Python 3.11+
 - [Google Gemini API Key](https://aistudio.google.com/app/apikey)
+- [OpenRouter API Key](https://openrouter.ai/keys)
 - Git
 
 ### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/FarsanaDS/Career-advisor-bot.git
-   cd career-advisor-bot
-   ```
+```bash
+# Clone repository
+git clone https://github.com/FarsanaDS/Career-advisor-bot.git
+cd Career-advisor-bot
 
-2. **Create and activate virtual environment:**
-   ```bash
-   python -m venv venv
-   # Windows
-   venv\Scripts\activate
-   # MacOS/Linux
-   source venv/bin/activate
-   ```
+# Create virtual environment
+python -m venv venv
 
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Activate environment
+# Linux/Mac
+source venv/bin/activate
+# Windows
+venv\Scripts\activate
 
-4. **Set up environment variables:**
-   Create a `.env` file in the root directory with:
-   ```env
-   GEMINI_API_KEY=your_api_key_here
-   ```
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
+cp .env.example .env
+# Edit .env with your API keys
+```
 
 ### Running the Application
 
-1. **Start the backend:**
-   ```bash
-   cd backend
-   uvicorn main:app --reload --port 8000
-   ```
+1. **Start Backend:**
+```bash
+cd backend
+uvicorn main:app --reload --port 8000
+```
 
-2. **Start the frontend:**
-   ```bash
-   cd ../frontend
-   streamlit run main.py
-   ```
+2. **Start Frontend (in new terminal):**
+```bash
+cd ../frontend
+streamlit run main.py
+```
 
-3. **Access the application:**
-   - Backend: http://localhost:8000
-   - Frontend: http://localhost:8501
+3. **Access the Application:**
+- Backend API: http://localhost:8000
+- Frontend UI: http://localhost:8501
+- API Documentation: http://localhost:8000/docs
 
 ## Deployment to Render 🚀
 
 1. **Create a Render account** at [render.com](https://render.com/)
-2. **Connect your GitHub repository**
-3. **Create an Environment Group:**
-   - Name: `gemini-api-key`
-   - Add your Gemini API key
-4. **Deploy the backend service:**
+2. **Create Environment Group:**
+   - Name: `ai-api-keys`
+   - Add `GEMINI_API_KEY` and `OPENROUTER_API_KEY`
+3. **Deploy Backend Service:**
    - Select "Web Service"
-   - Choose your repository
+   - Connect your GitHub repository
    - Name: `career-advisor-backend`
    - Runtime: Docker
    - Dockerfile Path: `Dockerfile`
    - Environment Variables:
      - `PORT`: 8000
-     - `GEMINI_API_KEY`: from group `gemini-api-key`
-5. **Deploy the frontend service:**
-   - Wait for backend to deploy and note its URL
+     - `GEMINI_API_KEY`: from group `ai-api-keys`
+     - `OPENROUTER_API_KEY`: from group `ai-api-keys`
+4. **Deploy Frontend Service:**
+   - Note backend URL after deployment
    - Create another "Web Service"
    - Name: `career-advisor-frontend`
    - Runtime: Docker
    - Dockerfile Path: `Dockerfile.frontend`
    - Environment Variables:
      - `PORT`: 8501
-     - `BACKEND_URL`: URL of your backend service
+     - `BACKEND_URL`: URL of backend service
 
 ## Project Structure 📁
 
@@ -120,7 +128,7 @@ career-advisor-bot/
 ├── backend/               # FastAPI backend
 │   ├── main.py            # Application entry point
 │   ├── config.py          # Configuration settings
-│   ├── models/            # AI models
+│   ├── models/            # AI models (Gemini + OpenRouter)
 │   ├── routes/            # API endpoints
 │   └── utils/             # Helper functions
 ├── frontend/              # Streamlit frontend
@@ -131,15 +139,28 @@ career-advisor-bot/
 ├── Dockerfile             # Backend Docker configuration
 ├── Dockerfile.frontend    # Frontend Docker configuration
 ├── requirements.txt       # Python dependencies
-└── .env.example           # Environment variables template
+├── .env.example           # Environment variables template
+└── README.md              # Project documentation
 ```
+
+## Supported AI Models 🤖
+
+| Provider | Model | Specialization |
+|----------|-------|----------------|
+| **Google** | Gemini 1.5 Pro | Career path recommendations |
+| **Google** | Gemini 1.5 Flash | Fast career insights |
+| **Mistral AI** | Mixtral 8x7B Instruct | Structured career advice |
+| **Google** | Gemma 7B | Educational guidance |
+| **DeepSeek** | Coder 33B | Technical career paths |
+| **Qwen** | Qwen 72B Chat | General career counseling |
 
 ## Contact 📧
 
-For questions or support, please contact:
-- Farsana Thasnem PA - farsanathesni02@gmail.com
-- Project Link: [https://github.com/FarsanaDS/Career-advisor-bot](https://github.com/FarsanaDS/Career-advisor-bot)
+For questions or support:
+- Project Lead: Farsana Thasnem PA
+- Email: farsanathesni02@gmail.com
+- Project Repository: [https://github.com/FarsanaDS/Career-advisor-bot](https://github.com/FarsanaDS/Career-advisor-bot)
 
 ---
 
-**Note**: This application provides AI-generated career advice. Always consult with professional career advisors before making important career decisions.
+**Note**: This application provides AI-generated career advice. While we strive for accuracy, always consult with professional career advisors before making important career decisions. The AI models may occasionally produce unexpected results - use discretion when implementing suggestions.
