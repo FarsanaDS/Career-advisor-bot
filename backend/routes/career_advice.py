@@ -1,7 +1,10 @@
 from fastapi import APIRouter, HTTPException
 from typing import Dict
-from backend.models.gemini_model import GeminiModel
+from backend.models.multi_model import MultiModel
 from backend.utils.validators import validate_skills_interests, validate_resume_length
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -14,18 +17,20 @@ async def get_career_advice(request: Dict):
         resume_text = validate_resume_length(request.get("resume_text", ""))
         
         # Get AI response
-        gemini = GeminiModel()
-        advice = await gemini.generate_advice(skills, interests, resume_text)
+        model_service = MultiModel()
+        result = await model_service.generate_advice(skills, interests, resume_text)
         
         return {
             "success": True,
-            "advice": advice,
-            "model": gemini.model_name
+            "advice": result["advice"],
+            "model": result["model"]
         }
 
-    except HTTPException:
-        raise  # Re-raise HTTP exceptions
+    except HTTPException as he:
+        logger.error(f"HTTPException in career advice: {he.detail}")
+        raise he
     except Exception as e:
+        logger.exception("Unexpected error in career advice endpoint")
         raise HTTPException(
             status_code=500,
             detail=f"Unexpected error: {str(e)}"
