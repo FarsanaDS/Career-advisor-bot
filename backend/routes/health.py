@@ -1,18 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from backend.config import Config
 from backend.models.multi_model import MultiModel
 import logging
 from fastapi.responses import RedirectResponse
-from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 
-# Initialize limiter and router
-limiter = Limiter(key_func=get_remote_address)
+# Initialize router
 router = APIRouter()
-router.state.limiter = limiter
-router.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
 logger = logging.getLogger(__name__)
 
 @router.get("/")
@@ -21,8 +16,7 @@ async def root():
     return RedirectResponse(url="/health")
 
 @router.get("/health")
-@limiter.limit("10/minute")
-async def health_check():
+async def health_check(request: Request):  # Add request parameter
     """Comprehensive health check endpoint with model status"""
     try:
         # Test configuration
