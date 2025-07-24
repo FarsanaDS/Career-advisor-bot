@@ -1,5 +1,8 @@
 import os
 from dotenv import load_dotenv
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -33,5 +36,25 @@ class Config:
     
     @classmethod
     def validate(cls):
-        if not cls.GEMINI_API_KEY and not cls.OPENROUTER_API_KEY:
-            raise ValueError("At least one AI API key must be provided")
+        """Validate configuration with detailed logging"""
+        errors = []
+        
+        # Gemini validation
+        if not cls.GEMINI_API_KEY:
+            errors.append("Missing GEMINI_API_KEY in environment variables")
+            logger.critical("GEMINI_API_KEY is not set")
+        else:
+            # Check if key is valid format
+            if not cls.GEMINI_API_KEY.startswith("AI"):
+                logger.warning("GEMINI_API_KEY doesn't start with 'AI' - may be invalid")
+        
+        # OpenRouter validation
+        if not cls.OPENROUTER_API_KEY:
+            errors.append("Missing OPENROUTER_API_KEY in environment variables")
+            logger.critical("OPENROUTER_API_KEY is not set")
+        else:
+            if len(cls.OPENROUTER_API_KEY) < 30:
+                logger.warning("OPENROUTER_API_KEY seems unusually short")
+        
+        if errors:
+            raise ValueError("; ".join(errors))
