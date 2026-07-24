@@ -1,11 +1,11 @@
-# AI Career Advisor Pro 🤖💼
+# AI Career Advisor Pro 
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://career-advisor-frontend.onrender.com)
 [![Multi-Model AI](https://img.shields.io/badge/Powered%20By-Gemini%20%2B%20OpenRouter-blue?style=for-the-badge)](https://openrouter.ai)
 
 **An intelligent career guidance system** that uses multiple AI models to provide reliable career advice, even during peak usage times. Get personalized career path recommendations, skill development guidance, and industry insights powered by cutting-edge AI.
 
-## Key Features ✨
+## Key Features 
 
 - **Multi-Model AI Architecture**: Automatically switches between Gemini and OpenRouter models for reliable service
 - **Resume Analysis**: Extract insights from uploaded resumes
@@ -14,7 +14,7 @@
 - **Model Transparency**: See which AI generated your advice
 - **Session History**: Track your previous queries and recommendations
 
-## Tech Stack 🛠️
+## Tech Stack 
 
 **Backend:**
 - Python
@@ -31,12 +31,12 @@
 - Render.com
 - Docker
 
-## Live Demo 🌐
+## Live Demo 
 
 Experience the application now:  
 [https://career-advisor-frontend.onrender.com](https://career-advisor-frontend.onrender.com)
 
-## How It Works 🔍
+## How It Works 
 
 1. **Input Your Profile**: Share your skills, interests, and optionally upload a resume
 2. **AI Analysis**: Our system analyzes your profile using multiple AI models
@@ -44,7 +44,7 @@ Experience the application now:
 4. **Personalized Advice**: Receive tailored career recommendations
 5. **Model Attribution**: See which AI generated your advice
 
-## Local Development Setup 🛠️
+## Local Development Setup 
 
 ### Prerequisites
 - Python 3.11+
@@ -121,7 +121,7 @@ streamlit run main.py
      - `PORT`: 8501
      - `BACKEND_URL`: URL of backend service
 
-## Project Structure 📁
+## Project Structure 
 
 ```
 career-advisor-bot/
@@ -143,7 +143,7 @@ career-advisor-bot/
 └── README.md              # Project documentation
 ```
 
-## Supported AI Models 🤖
+## Supported AI Models 
 
 | Provider | Model | Specialization |
 |----------|-------|----------------|
@@ -154,7 +154,7 @@ career-advisor-bot/
 | **DeepSeek** | Coder 33B | Technical career paths |
 | **Qwen** | Qwen 72B Chat | General career counseling |
 
-## Contact 📧
+## Contact 
 
 For questions or support:
 - Project Lead: Farsana Thasnem PA
