@@ -95,7 +95,7 @@ streamlit run main.py
 - Frontend UI: http://localhost:8501
 - API Documentation: http://localhost:8000/docs
 
-## Deployment to Render 🚀
+## Deployment to Render 
 
 1. **Create a Render account** at [render.com](https://render.com/)
 2. **Create Environment Group:**
